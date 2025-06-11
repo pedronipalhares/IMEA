@@ -60,13 +60,20 @@ pip install requests pandas urllib3 aiohttp
 ```
 
 ### 2. Set Your Credentials
-Edit the credentials in `imea_extractor.py`:
-```python
-credentials = {
-    'username': 'your_email@example.com',
-    'password': 'your_password'
-}
+Create a `.env` file in the project directory:
+```bash
+# Create .env file with your IMEA credentials
+echo "IMEA_USERNAME=your_email@example.com" > .env
+echo "IMEA_PASSWORD=your_password" >> .env
 ```
+
+Or create the `.env` file manually:
+```env
+IMEA_USERNAME=your_email@example.com
+IMEA_PASSWORD=your_password
+```
+
+**🔒 Security Note:** Never commit the `.env` file to version control! It's already included in `.gitignore`.
 
 ### 3. Extract Data
 ```bash
@@ -189,19 +196,27 @@ Recent extractions show clean, reliable data:
 
 **Minimal Requirements:**
 ```txt
-requests>=2.25.1
-pandas>=1.3.0
+requests>=2.28.0
+pandas>=1.5.0
 urllib3>=1.26.0
+python-dotenv>=1.0.0
+python-dateutil>=2.8.0
+```
+
+**Optional for advanced analysis:**
+```txt
 aiohttp>=3.8.0
+numpy>=1.24.0
 ```
 
 ## 🔒 Security & Best Practices
 
-- ✅ Credentials configured directly in code (for single-user use)
-- ✅ SSL warnings handled appropriately for IMEA's configuration
-- ✅ Custom TLS adapter for secure connections
-- ✅ No external dependencies - completely self-contained
-- ✅ Local file storage in `datasets/` directory
+- ✅ **Secure Credential Management**: Uses `.env` file and environment variables
+- ✅ **No Hardcoded Credentials**: Credentials never stored in source code
+- ✅ **Protected .env File**: Automatically excluded from version control
+- ✅ **SSL/TLS Security**: Custom TLS adapter for secure IMEA connections
+- ✅ **Local Data Storage**: All data stored securely in local `datasets/` directory
+- ✅ **Error Handling**: Graceful handling of missing credentials with clear error messages
 
 ## 🆕 Latest Updates (Current Version)
 

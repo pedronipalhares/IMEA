@@ -22,6 +22,15 @@ import concurrent.futures
 import os
 import sys
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+    HAS_DOTENV = True
+except ImportError:
+    HAS_DOTENV = False
+    print("⚠️  python-dotenv not installed. Install with: pip install python-dotenv")
+
 # Try to import dateutil, fall back to manual month calculation if not available
 try:
     from dateutil.relativedelta import relativedelta
@@ -36,6 +45,34 @@ class BaseExtractor:
 
 # Suppress SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# Credential management functions
+def get_credentials_from_env() -> Dict[str, str]:
+    """
+    Get IMEA credentials from environment variables
+    
+    Returns:
+        Dict with username and password
+        
+    Raises:
+        ValueError: If credentials are not found in environment
+    """
+    username = os.getenv('IMEA_USERNAME')
+    password = os.getenv('IMEA_PASSWORD')
+    
+    if not username or not password:
+        raise ValueError(
+            "❌ IMEA credentials not found in environment variables!\n"
+            "Please set IMEA_USERNAME and IMEA_PASSWORD in your .env file:\n"
+            "  IMEA_USERNAME=your_email@example.com\n"
+            "  IMEA_PASSWORD=your_password\n"
+            "Or set them as environment variables."
+        )
+    
+    return {
+        'username': username,
+        'password': password
+    }
 
 # Dataset management functions
 def ensure_datasets_dir() -> str:
@@ -877,11 +914,8 @@ def run():
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
         
-        # Credentials (in production, use environment variables)
-        credentials = {
-            'username': 'gpalhares@santander.com.br',
-            'password': 'Santander24@@'
-        }
+        # Get credentials from environment variables
+        credentials = get_credentials_from_env()
         
         # Initialize extractor
         extractor = IMEADirectExtractor(credentials)
@@ -918,11 +952,12 @@ def main():
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     
-    # Credentials (in production, use environment variables)
-    credentials = {
-        'username': 'gpalhares@santander.com.br',
-        'password': 'Santander24@@'
-    }
+    # Get credentials from environment variables
+    try:
+        credentials = get_credentials_from_env()
+    except ValueError as e:
+        print(str(e))
+        return
     
     # Initialize extractor
     extractor = IMEADirectExtractor(credentials)

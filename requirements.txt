@@ -1,5 +1,29 @@
+# IMEA Direct Data Extractor - Enhanced Version
+# Core dependencies for agricultural data extraction
+
+# Data processing and analysis
 pandas>=1.5.0
+numpy>=1.24.0
+
+# HTTP requests and SSL handling
 requests>=2.28.0
 urllib3>=1.26.0
+
+# Date and time utilities
 python-dateutil>=2.8.0
-python-dotenv>=1.0.0 
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# Concurrent processing (Python 3.8+ includes concurrent.futures in stdlib)
+# No additional dependency needed for concurrent.futures
+
+# Optional: Enhanced data analysis capabilities
+# Uncomment if you plan to use advanced analytics:
+# matplotlib>=3.6.0
+# seaborn>=0.12.0
+# plotly>=5.12.0
+
+# Optional: Export to different formats
+# openpyxl>=3.0.0    # For Excel export
+# xlsxwriter>=3.0.0  # Alternative Excel library 
